@@ -3,8 +3,9 @@
 /**
  * 后台基础控制器
  */
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\App;
 
+use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
