@@ -1,6 +1,6 @@
 <?php
 
-Route::match(["options","post"],'/app/index/notice', 'IndexController@notice');//首页列表
+Route::match(["options","post"],'/app/index/notice', 'App\IndexController@notice');//首页列表
 
 Route::namespace('App')->middleware(["token","api"])->group(function () {
 
