@@ -62,62 +62,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-        'mysql_wechat' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST_WECHAT', 'localhost'),
-            'port'      => env('DB_PORT_WECHAT', '3306'),
-            'database'  => env('DB_DATABASE_WECHAT', 'forge'),
-            'username'  => env('DB_USERNAME_WECHAT', 'forge'),
-            'password'  => env('DB_PASSWORD_WECHAT', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset'       => 'utf8mb4',
-            'collation'     => 'utf8mb4_unicode_ci',
-            'prefix'        => 'cloud_',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
 
-        'system_center' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST_CENTER', 'localhost'),
-            'port'      => env('DB_PORT_CENTER', '3306'),
-            'database'  => env('DB_DATABASE_CENTER', 'forge'),
-            'username'  => env('DB_USERNAME_CENTER', 'forge'),
-            'password'  => env('DB_PASSWORD_CENTER', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset'       => 'utf8mb4',
-            'collation'     => 'utf8mb4_unicode_ci',
-            'prefix'        => 'sany_',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
-
-        'mysql_crmgn' => [
-            'driver'    => 'mysql',
-            'host'      => env('DB_HOST_CRM', 'localhost'),
-            'port'      => env('DB_PORT_CRM', '3306'),
-            'database'  => env('DB_DATABASE_CRM', 'forge'),
-            'username'  => env('DB_USERNAME_CRM', 'forge'),
-            'password'  => env('DB_PASSWORD_CRM', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset'       => 'utf8mb4',
-            'collation'     => 'utf8mb4_unicode_ci',
-            'prefix'        => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
@@ -179,7 +124,6 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            (string)Redis::OPT_SERIALIZER   => (string)Redis::SERIALIZER_PHP,
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
