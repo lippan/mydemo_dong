@@ -39,10 +39,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapAdminRoutes();
-
-        $this->mapCommonRoutes();//公共调用路由
-
         $this->mapAppRoutes();//用户中心路由
 
     }
