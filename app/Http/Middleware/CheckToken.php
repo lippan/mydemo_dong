@@ -25,18 +25,6 @@ class CheckToken{
      */
     public function handle($request, Closure $next)
     {
-        /*$token_data = [
-            'uid'       => 4,
-            'level'     => "",
-            'is_depart_admin'=> 0,
-            'status'    => 1,
-            'username'  => "daiy11",
-            'is_admin'  => 1,
-            'role_id'   => "",
-            'crm_user_id'=> "daiy11",
-            'expire'    => time()+3600*24*17
-        ];
-        echo  Crypt::encrypt($token_data);exit;*/
 
         if("OPTIONS" == $request->method())//过滤掉嗅探请求
             $this->failed("请求方式不合法");
@@ -59,24 +47,6 @@ class CheckToken{
         if(time()>$params['expire'])
             $this->failed("token已过期！",4001);
 
-
-        $user = [
-            'uid'       => $params["uid"],
-            'status'    => $params["status"],
-            'username'  => $params["username"],
-            'is_admin'  => $params["is_admin"],
-            'role_id'   => $params["role_id"],
-            'level'     => $params["level"],//组织机构节点
-            'crm_user_id'       => $params["crm_user_id"],//crm用户id
-            'is_depart_admin'   => $params["is_depart_admin"],//是否为当前节点管理员
-        ];
-
-        if(isset($params["uid"]))
-        {
-            $request->attributes->add($user);
-        }
-        else
-            $this->failed("请求错误！",4001);
 
         return $next($request);
     }

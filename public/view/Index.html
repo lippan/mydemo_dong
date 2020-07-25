@@ -1,6 +1,4 @@
-﻿
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -116,7 +114,7 @@
     </style>
 </head>
 <body>
-<div class="wa">
+<div class="wa" id="app">
     <div class="dv dv1">
         <div class="imgs">
             <img height="40px" src="picture/logo.png" />
@@ -253,5 +251,57 @@
         });
     });
 </script>
+<script src="./static/js/vue/vue.min.js"></script>
+<script src="./static/js/vue/vue-resource.min.js"></script>
+<script>
+
+    var app=new Vue({
+        el: '#app',
+        data: {
+            form:{
+            },
+        },
+        methods: {
+            submit:function()
+            {
+                var postData = {};
+                if(!postData.top || !postData.down || !postData.m30_avg || !postData.tend || !postData.position)
+                {
+                    $('#iosDialog2').fadeIn(200);return;
+                }
+
+                this.$http.post("http://laravel.me/wap/analyse/index",postData,{emulateJSON:true,credentials:false}).then(function(res){
+                    var responData = res.data.data;
+
+                    if(responData)
+                    {
+
+                    }
+                    else
+                    {
+                        alert(res.data.message);return;
+                    }
+
+                },function(){
+
+                });
+            }
+
+        },
+        created: function () {
+            this.$http.post("http://laravel.me/wap/analyse/today","",{emulateJSON:true,credentials:false}).then(function(res){
+                var responData = res.data.data;
+                if(responData)
+                    this.form = responData;
+
+
+            },function(){
+
+            });
+        }
+    })
+</script>
+
+
 </body>
 </html>
