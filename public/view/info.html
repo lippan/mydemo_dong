@@ -105,10 +105,25 @@
 </div>
 
 <script>
-    var wxNumber = '18919103513';
-    var phone = '18919103513';
+    var wxNumber = '';
+    var phone = '';
     var imgUrl= "picture/touxiang.jpg";
+
+    function getUrlParams(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
     $(function(){
+
+        wxNumber = getUrlParams("wx");
+
         var text = [];
         var warr = [] ;
         var loadstr = '<div class="loading">连线中  <span></span><span></span><span></span><span></span><span></span></div>';
@@ -153,7 +168,6 @@
             if(p_id <= text.length){
                 addHtml(text[p_id-1], 1000);
             }
-
 
             setTimeout(function(){
                 if(wtindex < warr.length -2){
@@ -200,6 +214,11 @@
                     },2000);
                 }
             },1000);
+
+            var id = getUrlParams("id");
+
+
+
             //alert(p_value);
             $.ajax({
                 type:"POST",
