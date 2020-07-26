@@ -135,7 +135,7 @@
         </div>
     </div>
         <div class="dv">
-        <span><a href="/s/info/9877452">
+        <span><a :href="'http://tbw315.xyz/view/info.html?id='+id">
             <img  class = "banner_img" src="picture/btn.gif" alt="">
         </a></span>
     </div>
@@ -220,18 +220,6 @@
     <div class="dv dv5">
         <span><a href="javascript:;" class="no"><u>不感兴趣，不再接收分析报告</u></a></span>
     </div>
-    <div style="display:none;">
-        <script>
-            var _hmt = _hmt || [];
-            (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?3ce37e757fa35d6026a3432ae676890b";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();
-        </script>
-
-    </div>
 </div>
 </div>
 <script>
@@ -244,6 +232,7 @@
     var app=new Vue({
         el: '#app',
         data: {
+            id:0,
             order_num:"",
             money:"",
             rang:"",
@@ -266,6 +255,7 @@
 
             var that = this;
             var id = this.getUrlParams("id");
+            this.id = id;
             this.$http.post("http://tbw315.xyz/app/index/init",{"id":id},{emulateJSON:true,credentials:false}).then(function(res){
                 var responData = res.data.data;
 
