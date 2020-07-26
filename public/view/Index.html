@@ -119,7 +119,7 @@
             <img height="40px" src="picture/logo.png" />
         </div>
         <div class="title">
-            <span><h4>粥啊姑·豆浆·现煮粥·肠粉·小吃</h4></span>
+            <span><h4>{{sub_title}}</h4></span>
         </div>
     </div>
     <div class="dv dv2">
@@ -247,7 +247,8 @@
             order_num:"",
             money:"",
             rang:"",
-            hot:""
+            hot:"",
+            sub_title:""
         },
         methods: {
             getUrlParams:function(variable)
@@ -272,6 +273,7 @@
                 if(res.data.code == 2000)
                 {
                     document.title = responData.name+"_"+responData.title;
+                    that.sub_title   = responData.title;
                     that.money       = responData.money;
                     that.order_num   = responData.order_num;
                     that.hot         = responData.hot;
