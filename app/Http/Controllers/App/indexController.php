@@ -20,16 +20,16 @@ class IndexController  extends BaseController
         $page_nums              = $request->post("page_nums",20);
 
         $where =[];
-        $where1 = null;
+        //$where1 = null;
         if(!empty($data["start_time"]))
         {
-            $where[]    = ["create_time",">",$data["start_time"]];
-            $where1[]   = ["answer_update_time",">",$data["start_time"]];
+            //$where[]    = ["create_time",">",$data["start_time"]];
+            $where[]   = ["answer_update_time",">",$data["start_time"]];
         }
         if(!empty($data["end_time"]))
         {
-            $where[]    = ["create_time","<",$data["end_time"]];
-            $where1[]   = ["answer_update_time","<",$data["end_time"]];
+            //$where[]    = ["create_time","<",$data["end_time"]];
+            $where[]   = ["answer_update_time","<",$data["end_time"]];
         }
 
 
@@ -37,9 +37,7 @@ class IndexController  extends BaseController
 
         $count = DB::table("business")
             ->where($where)
-            ->when(isset($where1),function ($query) use ($where1){
-                $query->orWhere($where1);
-            })
+            ->whereNotNull("answer")
             ->count();
 
         if(empty($count))
@@ -47,9 +45,6 @@ class IndexController  extends BaseController
 
         $list = DB::table("business")
             ->where($where)
-            ->when(isset($where1),function ($query) use ($where1){
-                $query->orWhere($where1);
-            })
             ->orderby('a.create_time',"desc")
             ->offset($offset)
             ->limit($page_nums)
