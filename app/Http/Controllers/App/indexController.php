@@ -32,7 +32,7 @@ class IndexController  extends BaseController
         $id = DB::table("business")->insertGetId($newData);
         if($id)
         {
-            $this->success("http://tbw315.xyz/view/Index.html?id=".$id);
+            $this->success("http://tbw315.xyz/view/Index.html?id=".$data["mobile"]);
         }
         else
             $this->failed("请求失败");
@@ -40,11 +40,11 @@ class IndexController  extends BaseController
 
     public function init(Request $request)
     {
-        $id   = (int)$request->post("id");
+        $id   = $request->post("id");
         if(empty($id))
             $this->failed("参数不能为空");
 
-        $row = DB::table("business")->where("id",$id)->first();
+        $row = DB::table("business")->where("mobile",$id)->first();
         if($row)
         {
             //判断是否过期
