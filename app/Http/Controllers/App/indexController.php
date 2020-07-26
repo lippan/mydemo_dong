@@ -48,12 +48,12 @@ class IndexController  extends BaseController
             ->orderby('a.create_time',"desc")
             ->offset($offset)
             ->limit($page_nums)
-            ->count();
+            ->get();
 
-        $data["count"] = $count;
-        $data["list"]  = $list;
+        $data1["count"] = $count;
+        $data1["list"]  = $list;
 
-        $this->success($data);
+        $this->success($data1);
     }
 
 
