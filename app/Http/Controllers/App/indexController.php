@@ -45,7 +45,7 @@ class IndexController  extends BaseController
 
         $list = DB::table("business")
             ->where($where)
-            ->orderby('a.create_time',"desc")
+            ->orderby('create_time',"desc")
             ->offset($offset)
             ->limit($page_nums)
             ->get();
