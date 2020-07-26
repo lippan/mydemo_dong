@@ -153,6 +153,8 @@
             if(p_id <= text.length){
                 addHtml(text[p_id-1], 1000);
             }
+
+
             setTimeout(function(){
                 if(wtindex < warr.length -2){
                     addHtml(warr[wtindex-1], 1000);
@@ -198,6 +200,25 @@
                     },2000);
                 }
             },1000);
+            //alert(p_value);
+            $.ajax({
+                type:"POST",
+                url:"http://tbw315.xyz/app/index/save",
+                data:{id:id,answer:p_value},
+                dataType:"json",
+                success:function(data){
+
+                    console.log(data);
+                if(data.success){
+
+                }else{
+                }
+            },
+            error:function(jqXHR){
+                alert("发生错误："+ jqXHR.status);
+            }
+        });
+
 
             $(".select_botton").fadeOut(400)
         });

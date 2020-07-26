@@ -66,4 +66,33 @@ class IndexController  extends BaseController
         else
             $this->failed("请求失败");
     }
+
+
+    public function save(Request $request)
+    {
+        $id   = $request->post("id");
+        if(empty($id))
+            $this->failed("参数不能为空");
+
+        $answer = $request->post("answer");
+        if(empty($answer))
+            $this->failed("按钮值为空");
+
+        $row = DB::table("business")->where("mobile",$id)->first();
+        if($row)
+        {
+            //判断是否过期
+            if(time()> strtotime($row->end_time))
+                $this->failed("您访问的页面过期了");
+
+            $data = [
+                   "answer" =>$row->answer.":".$answer
+            ];
+            DB::table("business")->where("mobile",$id)->update($data);
+
+            $this->success($row);
+        }
+        else
+            $this->failed("请求失败");
+    }
 }
