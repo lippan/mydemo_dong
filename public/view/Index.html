@@ -262,6 +262,7 @@
         },
         created: function () {
 
+            var that = this;
             var id = this.getUrlParams("id");
             this.$http.post("http://tbw315.xyz/app/index/init",{"id":id},{emulateJSON:true,credentials:false}).then(function(res){
                 var responData = res.data.data;
@@ -269,12 +270,12 @@
                 console.log(responData);
                 if(res.data.code == 2000)
                 {
-                    document.title = responData.name+"_"+responData.name;
+                    document.title = responData.name+"_"+responData.title;
 
-1                   this.money       = responData.money;
-                    this.order_num   = responData.order_num;
-                    this.hot         = responData.hot;
-                    this.rang        = responData.rang;
+1                   that.money       = responData.money;
+                    that.order_num   = responData.order_num;
+                    that.hot         = responData.hot;
+                    that.rang        = responData.rang;
                 }
                 else
                 {
