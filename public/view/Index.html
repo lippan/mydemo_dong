@@ -127,8 +127,8 @@
             <span style="color:#FFF;font-size:16px;font-weight:bold;line-height:27px;">&nbsp;您店铺的当前状况&nbsp;</span>
         </div>
         <div class="zk">
-            <p> <span class="sp1">订单：偏低<span style="color:red;">↓</span></span> <span class="sp2">排名：一般</span> </p>
-            <p> <span class="sp1">人气：偏低<span style="color:red;">↓</span></span> <span class="sp2">收入：<span style="color:red;">较差</span></span> </p>
+            <p> <span class="sp1">订单：{{order_num}}</span> <span class="sp2">排名：{{rang}}</span> </p>
+            <p> <span class="sp1">人气：{{hot}}</span> <span class="sp2">收入：{{money}}</span> </p>
         </div>
         <div class="prompt">
             <span>经专业分析评估，当前店铺在同行中综合竞争力偏弱，有较大优化提升空间。</span>
@@ -243,8 +243,10 @@
     var app=new Vue({
         el: '#app',
         data: {
-            form:{
-            },
+            order_num:"",
+            money:"",
+            rang:"",
+            hot:""
         },
         methods: {
             getUrlParams:function(variable)
@@ -265,9 +267,18 @@
                 var responData = res.data.data;
 
                 console.log(responData);
-                if(responData)
+                if(res.data.code == 2000)
                 {
-                    document.title = responData.title;
+                    document.title = responData.name+"_"+responData.name;
+
+1                   app.money       = responData.money;
+                    app.order_num   = responData.order_num;
+                    app.hot         = responData.hot;
+                    app.rang        = responData.rang;
+                }
+                else
+                {
+                    alert("访问有误");return;
                 }
             },function(){
 
