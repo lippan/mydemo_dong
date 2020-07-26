@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>翔博科技_粥啊姑·豆浆·现煮粥·肠粉·小吃_店铺综合报告</title>
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
-    <script src="js/jquery-1.12.4.min.js"></script>
     <style>
         body{
             padding: 5px;
@@ -263,7 +262,7 @@
             var id = this.getUrlParams("id");
             this.$http.post("http://tbw315.xyz/app/index/init",{"id":id},{emulateJSON:true,credentials:false}).then(function(res){
                 var responData = res.data.data;
-                
+
                 console.log(responData);
                 if(responData)
                 {
