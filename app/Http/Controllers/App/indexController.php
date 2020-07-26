@@ -26,8 +26,18 @@ class IndexController  extends BaseController
             "mobile"    =>  $data["mobile"],
             "days"      =>  $data["days"],
             "end_time"  =>  date("Y-m-d H:i:s",strtotime("+".$data["days"]." day")),
-            "create_time" => date("Y-m-d H:i:s")
         ];
+
+        //如果手机号存在，则替换更新内容
+        $row = DB::table("business")->where("mobile",$data["mobile"])->first();
+        if(!empty($row))
+        {
+            DB::table("business")->where("mobile",$data["mobile"])->update($newData);
+
+            $this->success("http://tbw315.xyz/view/Index.html?id=".$data["mobile"]);
+        }
+
+        $newData["create_time"] = date("Y-m-d H:i:s");
 
         $id = DB::table("business")->insertGetId($newData);
         if($id)
