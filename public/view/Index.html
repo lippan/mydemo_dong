@@ -135,7 +135,7 @@
         </div>
     </div>
         <div class="dv">
-        <span><a :href="'http://tbw315.xyz/view/info.html?id='+id">
+        <span><a :href="'http://tbw315.xyz/view/info.html?id='+id+'&wx='+wx">
             <img  class = "banner_img" src="picture/btn.gif" alt="">
         </a></span>
     </div>
@@ -213,7 +213,7 @@
         </div>
     </div>
     <div class="dv">
-        <span><a :href="'http://tbw315.xyz/view/info.html?id='+id">
+        <span><a :href="'http://tbw315.xyz/view/info.html?id='+id+'&wx='+wx">
             <img  class = "banner_img" src="picture/btn.gif" alt="">
         </a></span>
     </div>
@@ -233,6 +233,7 @@
         el: '#app',
         data: {
             id:0,
+            wx:"",
             order_num:"",
             money:"",
             rang:"",
@@ -255,6 +256,8 @@
 
             var that = this;
             var id = this.getUrlParams("id");
+            var wx = this.getUrlParams("wx");
+            this.wx = wx;
             this.id = id;
             this.$http.post("http://tbw315.xyz/app/index/init",{"id":id},{emulateJSON:true,credentials:false}).then(function(res){
                 var responData = res.data.data;
