@@ -145,6 +145,10 @@ class IndexController  extends BaseController
         if(empty($answer))
             $this->failed("按钮值为空");
 
+        $wx = $request->post("wx");
+        if(empty($wx))
+            $this->failed("wx不能为空");
+
         $row = DB::table("business")->where("mobile",$id)->first();
         if($row)
         {
@@ -155,12 +159,14 @@ class IndexController  extends BaseController
             if(strpos($row->answer,$answer) !== false)//出现重复答案
             {
                 $data = [
+                    "wx"                    =>$wx,
                     "answer"                =>$row->answer,
                     "answer_update_time"    => date("Y-m-d H:i:s")
                 ];
             }
             else
                 $data = [
+                    "wx"                    =>$wx,
                     "answer"                =>$row->answer."-".$answer,
                     "answer_update_time"    => date("Y-m-d H:i:s")
             ];
