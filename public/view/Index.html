@@ -256,8 +256,8 @@
 
             var that = this;
             var id = this.getUrlParams("id");
-            var wx = this.getUrlParams("wx");
-            this.wx = wx;
+            //var wx = this.getUrlParams("wx");
+
             this.id = id;
             this.$http.post("http://tbw315.xyz/app/index/init",{"id":id},{emulateJSON:true,credentials:false}).then(function(res){
                 var responData = res.data.data;
@@ -271,6 +271,7 @@
                     that.order_num   = responData.order_num;
                     that.hot         = responData.hot;
                     that.rang        = responData.rang;
+                    that.wx          = responData.wx;
                 }
                 else
                 {
