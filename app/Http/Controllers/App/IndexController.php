@@ -91,6 +91,7 @@ class IndexController  extends BaseController
             "hot"       =>  $data["hot"],
             "money"     =>  $data["money"],
             "mobile"    =>  $data["mobile"],
+            "wx"        =>  $data["wx"],
             "days"      =>  $data["days"],
             "end_time"  =>  date("Y-m-d H:i:s",strtotime("+".$data["days"]." day")),
         ];
@@ -159,14 +160,14 @@ class IndexController  extends BaseController
             if(strpos($row->answer,$answer) !== false)//出现重复答案
             {
                 $data = [
-                    "wx"                    =>$wx,
+                    //"wx"                    =>$wx,
                     "answer"                =>$row->answer,
                     "answer_update_time"    => date("Y-m-d H:i:s")
                 ];
             }
             else
                 $data = [
-                    "wx"                    =>$wx,
+                    //"wx"                    =>$wx,
                     "answer"                =>$row->answer."-".$answer,
                     "answer_update_time"    => date("Y-m-d H:i:s")
             ];
