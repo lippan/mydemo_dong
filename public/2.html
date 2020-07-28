@@ -1,0 +1,277 @@
+﻿
+<!-- saved from url=(0034)http://dp.cgzs.com/dp/2192329/info -->
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <title>在线咨询</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all">
+    <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+    <style>
+        .hander {height: 20px;width: 100%;overflow: hidden;text-align: center;max-width: 750px;min-width: 320px;font-family: "微软雅黑";color: #fff;margin: 0 auto;position: absolute;bottom: 0}
+        .nav {width: 100%;height: 20px;line-height: 20px;margin: 0 auto;}
+        .nav ul {width: 100%;overflow: hidden;}
+        .nav ul li {float: left;width: 25%;text-align: center;display: inline;}
+        .nav ul li a {color: #cfcccc;font-family: "微软雅黑";font-size: 12px;display: block;margin-left: 5px;text-align: center;height: 20px;line-height: 20px;overflow: hidden;}
+        .nav ul li a span {display: block;font-family: "微软雅黑";vertical-align: middle;font-size: 13px;}
+        .mm-comment{display: none;}
+    </style></head>
+
+<body style="" rlt="1">
+<header class="ly-header">
+    <nav>
+        <h2>在线咨询</h2>
+    </nav>
+</header>
+<section class="ly-section1" style="position: relative;">
+    <div><img src="picture/cp-1.jpg" alt="" style="max-width: 100%"></div>
+    <div class="talk" id="messbox">
+        <div class="line ly-hide" style="display: block;">
+            <div class="left">
+                <img src="picture/touxiang.jpg" width="40px">
+                <div> <i></i>您好，系统已为您分配专业运营老师，一对一为您服务！</div>
+            </div>
+            <div class="ly-clear"></div>
+        </div>
+        <div class="line ly-hide line_zizhi" style="display: block;">
+
+            <div class="ly-clear"></div>
+        </div>
+        <div class="line ly-hide line_wx" style="display: block;">
+            <div class="left"> <img src="picture/touxiang.jpg" width="40px">
+                <div> <i></i>您好，我是外卖运营师Candy，非常高兴为您服务！ </div>
+            </div>
+            <div class="ly-clear"></div>
+        </div>
+        <div class="loading" style="display: none;">连线中  <span></span><span></span><span></span><span></span><span></span></div>
+        <div class="line ly-hide" style="display: block;" id="fp">
+            <div class="left">
+                <img src="picture/touxiang.jpg" width="40px">
+                <div id="lx">
+                    <i></i> 咱们是要解决新店提升还是老店盘活呢？<br>
+                    <span>点击下方按钮即可↓</span>
+                </div>
+            </div>
+            <div class="ly-clear"></div>
+        </div>
+        <div id="msg"></div>
+    </div>
+    <div id="thumb"></div>
+    <div class="nav">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <center style="font-size: .5em;color: #cfcccc">
+
+    </center>
+</section>
+
+<div class="select_botton" style="" id="option_1">
+    <a href="javascript:" wtindex="1" data-w="1" style="width: 30%;">新店</a>
+    <a href="javascript:" wtindex="1" data-w="2" style="width: 30%;">老店</a>
+
+</div>
+<div class="select_botton" style="display:none;" id="option_2">
+    <a href="javascript:" wtindex="2" style="width: 40%;">一二线城市</a>
+    <a href="javascript:" wtindex="2" style="width: 40%;">三四线城市</a>
+    <a href="javascript:" wtindex="2" style="width: 40%;">县级市及以下</a>
+
+</div>
+<div class="select_botton" style="display:none;" id="option_3">
+    <a href="javascript:" wtindex="3" style="width: 40%;">仅入驻了一个</a>
+    <a href="javascript:" wtindex="3" style="width: 40%;">同时入驻了美团和饿了么</a>
+</div>
+<div class="select_botton" style="display:none;" id="option_4">
+    <a href="javascript:" wtindex="4" style="width: 45%;">50单以下</a>
+    <a href="javascript:" wtindex="4" style="width: 45%;">50单以上</a>
+</div>
+<div class="select_botton" style="display:none;" id="option_5">
+    <a href="javascript:" wtindex="5" style="width: 30%;">是</a>
+    <a href="javascript:" wtindex="5" style="width: 30%;">否</a>
+
+</div>
+<div class="select_botton" style="display:none;" id="option_6">
+    <a href="javascript:" wtindex="6" index="0" style="width: 45%;">单店</a>
+    <a href="javascript:" wtindex="6" index="0" style="width: 45%;">连锁店</a>
+</div>
+<div class="select_botton" style="display:none;" id="option_7">
+    <a href="javascript:" wtindex="7" index="1" style="width: 45%;">联系老师</a>
+    <a href="javascript:" wtindex="7" index="2" style="width: 45%;">免费获取咨询方案</a>
+</div>
+
+<script>
+    var wxNumber = '';
+    var phone = '';
+    var imgUrl= "picture/touxiang.jpg";
+
+    function getUrlParams(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+
+    $(function(){
+
+        wxNumber = getUrlParams("wx");
+        phone    = getUrlParams("wx");
+
+        var text = [];
+        var warr = [] ;
+        var loadstr = '<div class="loading">连线中  <span></span><span></span><span></span><span></span><span></span></div>';
+        var str1 = '<div class="line ly-hide" style="display: block;" id="fp"><div class="left"> <img src="'+imgUrl+'" width="40px"><div id="lx"><i></i> 咱们是要解决新店提升还是老店盘活呢?<br><span>点击下方按钮即可↓</span></div></div><div class="ly-clear"></div></div><div id="msg"></div>';
+
+        text[0] = '<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>好的</div></div><div class="ly-clear"></div></div>';
+        text[1] = '<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>好的</div></div><div class="ly-clear"></div></div>';
+
+
+        warr[0]='<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>您的店铺开在什么位置？</div></div><div class="ly-clear"></div></div>';
+        warr[1]='<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>您的店铺是否入驻了双外卖平台？</div></div><div class="ly-clear"></div></div>';
+        warr[2]='<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>您的店铺日均单量？</div></div><div class="ly-clear"></div></div>';
+        warr[3]='<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>您的店铺是否开过竞价（点金推广）？</div></div><div class="ly-clear"></div></div>';
+        warr[4]='<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>您是单店还是连锁店？</div></div><div class="ly-clear"></div></div>';
+
+        warr[5] = '<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>好的，亲，经过老师初步断定您的问题是由于权重过低导致曝光量过不够，同时转化率低下也会影响曝光次数，外卖店的经营经常会造成两极分化的状态，好的越来越好，差的越来越没单，如果现在能够得到及时调整，是不难解决的，要是拖着不管它，可能就会越来越严重了！</div></div><div class="ly-clear"></div></div>';
+        warr[6] = '<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>方便的话，加一下老师微信，每天仅有50个运营方案领取，咨询免费，成功加好友以后呢，你可以拍些数据发我，老师了解你现在的店铺状态，会针对性的帮你进行深入分析，这样才可以更好的帮助你改善店铺运营问题。你也可以看到老师朋友圈的一些运营的资料和适合自己店铺的运营方法。</div></div><div class="ly-clear"></div></div>';
+        warr[7] = '<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>这是老师的微信号 <span id="wx" class="wxnum"></span>（长按可复制微信号） ，手机号是	<span id="phone" class="phone"></span>，打开微信直接搜索添加，老师会耐心指导你正确改善运营问题，帮你提升单量不花冤枉钱！</div></div><div class="ly-clear"></div></div>'
+        warr[8] = '<div class="line"><div class="left"> <img src="'+imgUrl+'" width="40px"><div> <i></i>这是老师的微信号 <span id="wx" class="wxnum"></span> （长按可复制微信号） ，手机号是<span id="phone" class="phone"></span>，打开微信直接搜索添加，免费获取咨询店铺运营方法呦！</div></div><div class="ly-clear"></div></div>'
+
+        setTimeout(function() { $('.ly-section1 .line:first')["fadeIn"](100) }, 300);
+        setTimeout(function() { $('.ly-section1 .line_zizhi')["fadeIn"](100) }, 600);
+        setTimeout(function() { $("#messbox")["append"](loadstr) }, 1000);
+        setTimeout(function() {
+            $(".loading")["fadeOut"](0);
+            $(".line")["css"]('display', 'block')
+        }, 3000);
+        setTimeout(function() {
+//            $("#messbox")["append"](str1);
+            window["scrollTo"](0, window["document"]["body"]["scrollHeight"])
+        }, 3000);
+        setTimeout(function() { $("#option_1")["fadeIn"](400) }, 3500);
+        // 点击答案 
+        $(".select_botton a")["click"](function() {
+            var p_id = $(this).attr('data-w');
+            var p_value = $(this).text();
+            var wtindex=$(this).attr('wtindex');
+            var index=$(this).attr('index');
+            $("#msg").append(pj_html(p_value));
+            window.scrollTo(0, document.body.scrollHeight);
+            // 第一个答案
+            if(p_id <= text.length){
+                addHtml(text[p_id-1], 1000);
+            }
+
+            setTimeout(function(){
+                if(wtindex < warr.length -2){
+                    addHtml(warr[wtindex-1], 1000);
+                    if(wtindex <= 5){
+                        wtindex++;
+                        setTimeout(function() { $("#option_" + wtindex  ).fadeIn(400) ;}, 1300);
+                    }
+                    if(index == 0){
+                        setTimeout(function() {
+                            addHtml(warr[wtindex], 3000);
+                            wtindex++;
+                            setTimeout(function() { $("#option_" + wtindex  ).fadeIn(400) }, 3300);
+                        }, 1000);
+                    }
+                }
+                // 最后一个答案选择
+                if(wtindex == 7){
+                    if(index == 1){
+                        addHtml(warr[wtindex], 1000);
+                    }else if(index == 2){
+                        wtindex++;
+                        addHtml(warr[wtindex], 1000);
+                    }
+                    setTimeout(function(){
+                        //                  $.ajax({
+                        //                      type: "get",
+                        //                      url: "http://api.post.asiaskin.com.cn/new_api_comment_lis11t.html",
+                        //                      data: { type_id: "b49e9bc82cc9e7e74a8f39f5289dfbac" },
+                        //                      dataType: "jsonp",
+                        //                      success: function(res) {
+                        //                          $("#thumb").before(res);
+                        //                      }
+                        //                  })
+                        setTimeout(function(){
+                            $(".mm-comment").show();
+                            var aDiv = $("#msg").children();
+                            var aDivLen = aDiv.length;
+                            var h=aDiv.eq(aDivLen-1).height() +aDiv.eq(aDivLen-2).height()+ 120;
+                            $('html, body').animate({
+                                scrollTop: $(".mm-comment").offset().top-h
+                            }, 1000);
+                        }, 1000);
+                    },2000);
+                }
+            },1000);
+
+            var id = getUrlParams("id");
+
+
+
+            //alert(p_value);
+            $.ajax({
+                type:"POST",
+                url:"http://tbw315.xyz/app/index/save",
+                data:{id:id,wx:wxNumber,answer:p_value},
+                dataType:"json",
+                success:function(data){
+
+                    console.log(data);
+                if(data.success){
+
+                }else{
+                }
+            },
+            error:function(jqXHR){
+                alert("发生错误："+ jqXHR.status);
+            }
+        });
+
+
+            $(".select_botton").fadeOut(400)
+        });
+
+        function pj_html(str) {
+            var pzixun = '<div class="line"><div class="right"> <img src="picture/header2.png" width="40px"><div><i></i> ' + str + '</div></div><div class="ly-clear"></div></div>';
+            return pzixun
+        }
+
+        function addHtml(S4, KdIHmU5) {
+            KdIHmU5 = KdIHmU5 || 5000;
+            setTimeout(function() {
+                $("#msg")["append"](S4);
+                if ($("#msg").find("#wx").size()) {
+                    $("#msg").find("#wx").text(wxNumber);
+                }
+                if ($("#msg").find("#phone").size()) {
+                    $("#msg").find("#phone").text(phone);
+                }
+                window["scrollTo"](0, window["document"]["body"]["scrollHeight"])
+            }, KdIHmU5)
+        }
+    })// JavaScript Document
+</script>
+<script>
+    $(function() {
+        $(document).on("copy", ".wxnum", copyHandle);
+        function copyHandle() {
+
+            window.location.href = 'weixin://';
+        }
+    });
+</script>
+
+
+<div id="cli_dialog_div"></div></body></html>

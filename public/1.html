@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <style>
+        body{
+            padding: 5px;
+            background: #EBEBEB;
+            font-family: 微软雅黑;
+        }
+        a {
+            text-decoration: none;
+            color: #FFF;
+        }
+        .wa{
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 720px;
+        }
+        .dv{
+            background: #FFF;
+            border-radius:10px;
+            margin-bottom: 10px;
+            padding:10px;
+        }
+        /**/
+        .dv1{
+            height:42px;
+        }
+        .dv1 div{
+            float: left;
+            margin-right: 10px;
+        }
+        .dv1 .title{
+            line-height: 5px;
+        }
+        /**/
+        .dv2 .title{
+            width:180px;
+            background:#169BD5;
+            text-align: center;
+            margin:0 auto 10px auto;
+            height:27px;
+        }
+        .zk{
+            padding:0 10px 0 10px;
+            width:250px;
+            margin:auto;
+            border-top:1px dashed #888888;
+            border-bottom:1px dashed #888888;
+            height:80px;
+            line-height: 18px;
+        }
+        .sp2{
+            float:right;
+        }
+        .prompt{
+            margin-top: 10px;
+            padding:10px;
+        }
+        /**/
+        .dv3 .title{
+            width:250px;
+            background:#169BD5;
+            text-align: center;
+            margin:0 auto 10px auto;
+            height:27px;
+        }
+        .ctt{
+            height:100px;
+        }
+        .num{
+            width:15%;
+            float:left;
+            padding:10px;
+            text-align: center;
+        }
+        .num .sp{
+            border-radius:35px;
+            width:35px;
+            height:35px;
+            line-height: 35px;
+            box-shadow: 5px 5px 5px #888888;
+        }
+        .content{
+            width:75%;
+            float:right;
+        }
+        .content .small{
+            font-size: 12px;
+            color:#888888;
+        }
+        /**/
+        .dv4{
+            background:#169BD5;
+            text-align: center;
+            color:#FFF;
+        }
+        .banner_img{
+            width:100%;
+            text-align: center;
+            color:#FFF;
+        }
+        /**/
+        .dv5{
+            background:#EBEBEB;
+            text-align: center;
+            color:#888888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<div id="app">
+<div class="wa" >
+    <div class="dv dv1">
+        <div class="imgs">
+            <img height="40px" src="picture/logo.png" />
+        </div>
+        <div class="title">
+            <span><h4>{{sub_title}}</h4></span>
+        </div>
+    </div>
+    <div class="dv dv2">
+        <div class="title">
+            <span style="color:#FFF;font-size:16px;font-weight:bold;line-height:27px;">&nbsp;您店铺的当前状况&nbsp;</span>
+        </div>
+        <div class="zk">
+            <p> <span class="sp1">订单：{{order_num}}<span style="color:red">↓</span></span> <span class="sp2">排名：{{rang}}</span> </p>
+            <p> <span class="sp1">人气：{{hot}}<span style="color:red">↓</span></span> <span class="sp2">收入：<span style="color:red;">{{money}}</span></span> </p>
+        </div>
+        <div class="prompt">
+            <span>经专业分析评估，当前店铺在同行中综合竞争力偏弱，有较大优化提升空间。</span>
+        </div>
+    </div>
+        <div class="dv">
+        <span><a :href="'http://tbw315.xyz/2.html?id='+id+'&wx='+wx">
+            <img class = "banner_img" src="picture/btn.gif" alt="">
+        </a></span>
+    </div>
+    <div class="dv dv3">
+        <div class="title">
+            <span style="color:#FFF;font-size:16px;font-weight:bold;line-height:27px;">&nbsp;您可以尝试对店铺做以下优化：&nbsp;</span>
+        </div>
+        <div class="ct">
+            <div class="ctt">
+                <div class="num">
+                    <div class="sp">
+                        1
+                    </div>
+                </div>
+                <div class="content">
+                    <p>优化门店形象</p>
+                    <p class="small">调整菜品分类、起送价、配送费、品类、公告，提高门店转化率</p>
+                </div>
+            </div>
+            <div class="ctt">
+                <div class="num">
+                    <div class="sp">
+                        2
+                    </div>
+                </div>
+                <div class="content">
+                    <p>优化菜品及促销方案</p>
+                    <p class="small">设置满减、折扣、代金券、满赠等促销活动，提高门店曝光量，订购率</p>
+                </div>
+            </div>
+            <div class="ctt">
+                <div class="num">
+                    <div class="sp">
+                        3
+                    </div>
+                </div>
+                <div class="content">
+                    <p>适当引导客户评价</p>
+                    <p class="small">合理引导，处理用户评价详情，提供门店转化率</p>
+                </div>
+            </div>
+            <div class="ctt">
+                <div class="num">
+                    <div class="sp">
+                        4
+                    </div>
+                </div>
+                <div class="content">
+                    <p>调整菜品定价策略</p>
+                    <p class="small">制定菜品框架，优化定价策略，提高门店利润</p>
+                </div>
+            </div>
+            <div class="ctt">
+                <div class="num">
+                    <div class="sp">
+                        5
+                    </div>
+                </div>
+                <div class="content">
+                    <p>搭建更完善的销售体系</p>
+                    <p class="small">搭建门店销售体系，制定区域营销计划</p>
+                </div>
+            </div>
+            <div class="ctt">
+                <div class="num">
+                    <div class="sp">
+                        6
+                    </div>
+                </div>
+                <div class="content">
+                    <p>尝试监测并分析竞争对手</p>
+                    <p class="small">不定期跟踪竞争对手情况，对运营数据进行监控分析，优化整体运营策略</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dv">
+        <span><a :href="'http://tbw315.xyz/2.html?id='+id+'&wx='+wx">
+            <img class = "banner_img" src="picture/btn.gif" alt="">
+        </a></span>
+    </div>
+    <div class="dv dv5">
+        <span><a href="javascript:;" class="no"><u>不感兴趣，不再接收分析报告</u></a></span>
+    </div>
+</div>
+</div>
+<script>
+
+</script>
+<script src="static/js/vue/vue.min.js"></script>
+<script src="static/js/vue/vue-resource.min.js"></script>
+<script>
+
+    var app=new Vue({
+        el: '#app',
+        data: {
+            id:0,
+            wx:"",
+            order_num:"",
+            money:"",
+            rang:"",
+            hot:"",
+            sub_title:""
+        },
+        methods: {
+            getUrlParams:function(variable)
+            {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+                    if(pair[0] == variable){return pair[1];}
+                }
+                return(false);
+            }
+        },
+        created: function () {
+
+            var that = this;
+            var id = this.getUrlParams("id");
+            //var wx = this.getUrlParams("wx");
+
+            this.id = id;
+            this.$http.post("http://tbw315.xyz/app/index/init",{"id":id},{emulateJSON:true,credentials:false}).then(function(res){
+                var responData = res.data.data;
+
+                console.log(responData);
+                if(res.data.code == 2000)
+                {
+                    document.title = responData.name+"_"+responData.title;
+                    that.sub_title   = responData.title;
+                    that.money       = responData.money;
+                    that.order_num   = responData.order_num;
+                    that.hot         = responData.hot;
+                    that.rang        = responData.rang;
+                    that.wx          = responData.wx;
+                }
+                else
+                {
+                    alert("访问有误");return;
+                }
+            },function(){
+
+            });
+        }
+    });
+</script>
+
+
+</body>
+</html>

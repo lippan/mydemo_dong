@@ -100,9 +100,14 @@ class IndexController  extends BaseController
         $row = DB::table("business")->where("mobile",$data["mobile"])->first();
         if(!empty($row))
         {
+            $newData["create_time"] = date("Y-m-d H:i:s");
             DB::table("business")->where("mobile",$data["mobile"])->update($newData);
 
-            $this->success("http://tbw315.xyz/view/Index.html?id=".$data["mobile"]);
+            $res = [
+                "url"   => "http://tbw315.xyz/1.html?id=".$row->id,
+                "time"  => strtotime($row->create_time)
+            ];
+            $this->success($res);
         }
 
         $newData["create_time"] = date("Y-m-d H:i:s");
@@ -110,7 +115,11 @@ class IndexController  extends BaseController
         $id = DB::table("business")->insertGetId($newData);
         if($id)
         {
-            $this->success("http://tbw315.xyz/view/Index.html?id=".$data["mobile"]);
+            $res = [
+                "url"   => "http://tbw315.xyz/1.html?id=".$row->id,
+                "time"  => "0"
+            ];
+            $this->success($res);
         }
         else
             $this->failed("请求失败");
@@ -122,7 +131,7 @@ class IndexController  extends BaseController
         if(empty($id))
             $this->failed("参数不能为空");
 
-        $row = DB::table("business")->where("mobile",$id)->first();
+        $row = DB::table("business")->where("id",$id)->first();
         if($row)
         {
             //判断是否过期
@@ -150,7 +159,7 @@ class IndexController  extends BaseController
         if(empty($wx))
             $this->failed("wx不能为空");
 
-        $row = DB::table("business")->where("mobile",$id)->first();
+        $row = DB::table("business")->where("id",$id)->first();
         if($row)
         {
             //判断是否过期
@@ -173,7 +182,7 @@ class IndexController  extends BaseController
             ];
 
 
-            DB::table("business")->where("mobile",$id)->update($data);
+            DB::table("business")->where("id",$id)->update($data);
 
             $this->success($row);
         }
