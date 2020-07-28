@@ -116,7 +116,7 @@ class IndexController  extends BaseController
         if($id)
         {
             $res = [
-                "url"   => "http://tbw315.xyz/1.html?id=".$row->id,
+                "url"   => "http://tbw315.xyz/1.html?id=".$id,
                 "time"  => "0"
             ];
             $this->success($res);
