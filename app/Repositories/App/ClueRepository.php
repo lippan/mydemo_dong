@@ -1,10 +1,10 @@
 <?php
 
 /**
- *  线索资源
+ * 线索资源
  */
-namespace App\Repositories\App;
-use App\Repositories\Business\WaitDoneRepository;
+namespace App\Repositories\Business;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -12,249 +12,44 @@ class ClueRepository
 {
     use \App\Helpers\ApiResponse;
 
-    //客户表
-    private $customer;
-    private $source;
-    private $clue;
-    private $user;
-    private $address;
-
-    private $base_url;//图片地址
-
-    //初始化需要用到的表名称
-    public function __construct()
-    {
-        $this->customer                 = config('db_table.customer_table');
-        $this->clue                     = config('db_table.clue_table');
-        $this->user                     = config('db_table.user_table');
-        $this->source                   = config('db_table.crm_source');
-        $this->address                  = config('db_table.address_table');
-        $this->base_url                 = config('oss.base_url');
-    }
-
-
     /**
-     * 列表
-     */
-    public function lists($params,$uid,$crm_user_id,$is_admin,$isDepartAdmin=null,$level=null)
-    {
-
-        $page       = !empty($params['page'])       ? (int)$params['page']:1;
-        $page_nums  = !empty($params['page_nums'])  ? (int)$params['page_nums']:10;
-        $offset     = ($page-1) * $page_nums;
-
-
-        //如果是超级管理员
-        if($is_admin)
-        {
-            $list = $this->adminList($params,$offset,$page_nums);
-            return $list;
-        }
-
-        if(empty($crm_user_id))
-            $list = $this->normalList($uid,$isDepartAdmin,$level,$params,$offset,$page_nums);
-        else
-            $list = $this->crmList($uid,$crm_user_id,$params,$offset,$page_nums);
-
-        return $list;
-    }
-
-
-    /**
-     * 添加
+     * 添加线索
+     * @param $params
+     * @return bool
      */
     public function add($params)
     {
         $data = [
-            "uid"           => $params["uid"],
-            "customer_id"   => $params["customer_id"],
-            "request_remark"=> $params["request_remark"],
-            "next_date"     => $params["next_date"],
+            "mobile"        => $params["mobile"],
+            "shop_name"     => $params["shop_name"],
+            "position"      => $params["position"],
+            "source"        => $params["source"],
             "create_time"   => date("Y-m-d H:i:s")
         ];
 
-        isset($params["level"]) && $data["level"] = $params["level"];
-
-        isset($params["province_id"]) && $data["province_id"] = $params["province_id"];
-        isset($params["city_id"]) && $data["city_id"] = $params["city_id"];
+        isset($params["order"]) && $data["order"] = $params["order"];
+        isset($params["range"]) && $data["range"] = $params["range"];
+        isset($params["people_hot"]) && $data["people_hot"] = $params["people_hot"];
+        isset($params["income"]) && $data["income"] = $params["income"];
+        isset($params["position"]) && $data["position"] = $params["position"];
+        isset($params["url"]) && $data["url"] = $params["url"];
+        isset($params["sms_send_nums"]) && $data["sms_send_nums"] = $params["sms_send_nums"];
+        isset($params["sms_last_send_time"]) && $data["sms_last_send_time"] = $params["sms_last_send_time"];
+        isset($params["sms_feedback"]) && $data["sms_feedback"] = $params["sms_feedback"];
+        isset($params["qq_number"]) && $data["qq_number"] = $params["qq_number"];
+        isset($params["wx_number"]) && $data["wx_number"] = $params["wx_number"];
+        isset($params["telphone_sale_nums"]) && $data["telphone_sale_nums"] = $params["telphone_sale_nums"];
+        isset($params["telphone_last_call_time"]) && $data["telphone_last_call_time"] = $params["telphone_last_call_time"];
+        isset($params["telphone_record"]) && $data["telphone_record"] = $params["telphone_record"];
+        isset($params["status"]) && $data["status"] = $params["status"];
         isset($params["source"]) && $data["source"] = $params["source"];
-        //isset($params["next_date"]) && $data["next_date"] = $params["next_date"];
+        isset($params["shop_area"]) && $data["shop_area"] = $params["shop_area"];
+        isset($params["longitude"]) && $data["longitude"] = $params["longitude"];
+        isset($params["latitude"]) && $data["latitude"] = $params["latitude"];
+        isset($params["remark"]) && $data["remark"] = $params["remark"];
 
-        $clueId = DB::table($this->clue)->insertGetId($data);
-        if($clueId)
-        {
-            DB::table($this->customer)->where("customer_id",$params["customer_id"])->update(["last_follow_time"=>date("Y-m-d H:i:s")]);
-
-            $waitDoneRepos = new WaitDoneRepository();
-            $waitDoneRepos->add($params["uid"],$params["customer_id"],"clue",$clueId,$params["next_date"],$data["create_time"]);
-        }
-
-        return $clueId;
-    }
-
-
-    /**
-     * 编辑
-     */
-    public function edit($params,$clueId)
-    {
-        $cRow = DB::table($this->clue)->where("clue_id",$clueId)->first();
-        if(empty($cRow))
-            $this->failed("访问出错");
-
-        $data = [];
-        isset($params["province_id"]) && $data["province_id"] = $params["province_id"];
-        isset($params["city_id"]) && $data["city_id"] = $params["city_id"];
-        isset($params["source"]) && $data["source"] = $params["source"];
-
-        if(empty($data))
-            return true;
-
-        $bool = DB::table($this->clue)->where("clue_id",$clueId)->update($data);
-
-        DB::table($this->customer)->where("customer_id",$cRow->customer_id)->update(["last_follow_time"=>date("Y-m-d H:i:s")]);
+        $bool = DB::table("live_data")->insert($data);
 
         return $bool;
-    }
-
-    /**
-     * 详情
-     */
-    public function info($clueId)
-    {
-        $row = DB::table($this->clue." as a")
-            ->leftJoin($this->customer." as b","a.customer_id","=","b.customer_id")
-            ->leftJoin($this->source." as c","a.source","=","c.id")
-            ->leftJoin($this->user." as d","d.uid","=","a.uid")
-            ->leftJoin($this->address." as e","a.province_id","=","e.id")
-            ->leftJoin($this->address." as f","a.city_id","=","f.id")
-            ->where("a.clue_id",$clueId)
-            ->first(["a.*","b.name","c.name as source_name","d.username","e.name as pname","f.name as cname"]);
-
-        if(empty($row))
-            $this->failed("访问出错");
-
-        return $row;
-    }
-
-
-    /**
-     * 线索历史
-     * @param $params
-     * @return object
-     */
-    public function  history($params,$uid,$crm_user_id,$is_admin,$isDepartAdmin=null,$level=null)
-    {
-        $page       = !empty($params['page'])       ? (int)$params['page']:1;
-        $page_nums  = !empty($params['page_nums'])  ? (int)$params['page_nums']:10;
-        $offset     = ($page-1) * $page_nums;
-
-        //如果是超级管理员
-        if($is_admin)
-        {
-            $list = $this->adminList($params,$offset,$page_nums);
-            return $list;
-        }
-
-        if(empty($crm_user_id))
-            $list = $this->normalList($uid,$isDepartAdmin,$level,$params,$offset,$page_nums);
-        else
-            $list = $this->crmList($uid,$crm_user_id,$params,$offset,$page_nums);
-
-        return $list;
-    }
-
-
-    /**
-     * 我的客户列表
-     */
-    public function myCustomerList($uid)
-    {
-        $list = DB::table($this->customer)->where("uid",$uid)->get();
-
-        return $list;
-    }
-
-
-
-    /**
-     * 超级管理员查看列表
-     * @param $params
-     * @param $offset
-     * @param $page_nums
-     * @return object
-     */
-    protected  function adminList($params,$offset,$page_nums)
-    {
-        $field  = !empty($params["field"]) ? $params["field"]:"create_time";
-        $sort   = !empty($params["sort"]) ? $params["sort"]:"desc";
-
-        $where = [];
-        isset($params["customer_id"]) && $where[] = ["a.customer_id","=",$params["customer_id"]];
-
-        $list = DB::table($this->clue." as a")
-            ->leftJoin($this->customer." as b","a.customer_id","=","b.customer_id")
-            ->leftJoin($this->user." as c","c.uid","=","a.uid")
-            ->where($where)
-            ->orderby('a.'.$field,$sort)
-            ->offset($offset)
-            ->limit($page_nums)
-            ->get(["a.*","b.*","c.username"]);
-
-        return $list;
-    }
-
-
-    //不具备crm属性用户列表
-    protected function normalList($uid,$isDepartAdmin,$level,$params,$offset,$page_nums)
-    {
-        $field  = !empty($params["field"]) ? $params["field"]:"create_time";
-        $sort   = !empty($params["sort"]) ? $params["sort"]:"desc";
-
-        isset($params["customer_id"]) && $where[] = ["a.customer_id","=",$params["customer_id"]];
-
-        if($isDepartAdmin)
-            $where[] = ['a.level', 'like', $level."%"];
-        else
-            $where[] = ['a.uid', '=', $uid];
-
-        $list = DB::table($this->clue." as a")
-            ->leftJoin($this->customer." as b","a.customer_id","=","b.customer_id")
-            ->leftJoin($this->user." as c","c.uid","=","a.uid")
-            ->where($where)
-            ->orderby('a.'.$field,$sort)
-            ->offset($offset)
-            ->limit($page_nums)
-            ->get(["a.*","b.*","c.username"]);
-
-        $data["list"] = $list;
-
-        return $data;
-    }
-
-    //crm属性用户列表
-    protected function crmList($uid,$crm_user_id,$params,$offset,$page_nums)
-    {
-        $field  = !empty($params["field"]) ? $params["field"]:"create_time";
-        $sort   = !empty($params["sort"]) ? $params["sort"]:"desc";
-
-        $userArr = getUserAuth($crm_user_id,$uid);
-
-        $where = [];
-        isset($params["customer_id"]) && $where[] = ["a.customer_id","=",$params["customer_id"]];
-
-        $list = DB::table($this->clue." as a")
-            ->leftJoin($this->customer." as b","a.customer_id","=","b.customer_id")
-            ->leftJoin($this->user." as c","c.uid","=","a.uid")
-            ->where($where)
-            ->whereIn("a.uid",$userArr)
-            ->orderby('a.'.$field,$sort)
-            ->offset($offset)
-            ->limit($page_nums)
-            ->get(["a.*","b.*","c.username"]);
-
-        $data["list"] = $list;
-
-        return $data;
     }
 }
