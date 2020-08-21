@@ -7,6 +7,9 @@ Route::match(["options","post"],'/app/index/mobile', 'App\IndexController@mobile
 Route::match(["options","post"],'/app/index/lists', 'App\IndexController@lists');//首页列表
 Route::match(["options","post"],'/app/index/get_date_num', 'App\IndexController@getDateNum');//首页列表
 
+Route::match(["options","post"],'/app/clue/add', 'App\ClueController@add');//首页列表
+
+
 Route::namespace('App')->middleware(["token","api"])->group(function () {
 
    // Route::match(["options","post"],'/app/index/lists', 'IndexController@lists');//首页列表
