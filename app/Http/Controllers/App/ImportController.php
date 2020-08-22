@@ -9,9 +9,9 @@ use App\Http\Controllers\BaseController;
 use App\Repositories\Business\ClueRepository;
 use Illuminate\Http\Request;
 
-class ClueController  extends BaseController
+class ImportController  extends BaseController
 {
-    public function add(Request $request,ClueRepository $clueRepository)
+    public function data(Request $request,ClueRepository $clueRepository)
     {
         $data               = $request->all();
         $data["mobile"]     = $request->post("mobile");
