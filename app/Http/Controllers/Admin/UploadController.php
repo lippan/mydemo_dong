@@ -3,7 +3,7 @@
 /**
  * 上传控制器
  */
-namespace App\Http\Controllers\App;
+namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 
 use Illuminate\Http\Request;
