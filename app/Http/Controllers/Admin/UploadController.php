@@ -14,6 +14,7 @@ class UploadController extends  BaseController
 {
 
     private $business       = "business";
+    private $user           = "user";
     /**
      * 上传excel文档
      */
@@ -21,7 +22,19 @@ class UploadController extends  BaseController
     {
         set_time_limit(0);
         //获取表单上传文件
-        $file    = $request->file('file');
+        $file       = $request->file('file');
+        $departId   = $request->post("depart_id");
+        if(empty($departId))
+            $this->failed("所属公司不能为空");
+
+        $where =[
+            "depart_id"         => $departId,
+            "is_depart_admin"   => 1
+        ];
+        $row = DB::table($this->user)->where($where)->first();
+
+        if(empty($row))
+            $this->failed("该部门未设置管理员");
 
         if($file && $file->isValid())
         {
@@ -100,6 +113,8 @@ class UploadController extends  BaseController
                         $data[$k]['mobile']         = $v;
                         $data[$k]['source']         = $val[6];
                         $data[$k]['shop_area']      = $val[7];
+                        $data[$k]["depart_id"]      = $departId;
+                        $data[$k]["uid"]            = $row->uid;
                         if(isset($str))
                         {
                             $data[$k]['longitude']      = $str[0];
@@ -114,6 +129,8 @@ class UploadController extends  BaseController
                     $newdata['mobile']         = $arr[0];
                     $newdata['source']         = $val[6];
                     $newdata['shop_area']      = $val[7];
+                    $newdata["depart_id"]      = $departId;
+                    $newdata["uid"]            = $row->uid;
                     if(isset($str))
                     {
                         $newdata['longitude']      = $str[0];
@@ -131,6 +148,8 @@ class UploadController extends  BaseController
                     $data[$k]['mobile']         = $val[5];
                     $data[$k]['source']         = $val[6];
                     $data[$k]['shop_area']      = $val[7];
+                    $data[$k]["depart_id"]      = $departId;
+                    $data[$k]["uid"]            = $row->uid;
 
                     if(strpos($val[8],",") !== false)
                     {

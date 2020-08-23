@@ -62,9 +62,9 @@ class UserRepository
             ->get(["a.uid","a.username","a.mobile","a.role_id","a.depart_id","last_login_time","last_login_ip","is_depart_admin","a.status","a.create_time","b.depart_name"]);
 
         $data["list"]  = $list;
-        $data["month"] = date("Y-m");
+        //$data["month"] = date("Y-m");
 
-        if(!$list->isEmpty())
+        /*if(!$list->isEmpty())
         {
             foreach($list as &$val)
             {
@@ -74,7 +74,7 @@ class UserRepository
                 else
                     $val->task_money = $row->task_money;
             }
-        }
+        }*/
 
         return $data;
     }
