@@ -76,7 +76,7 @@ class ClueRepository
         {
             $bool = DB::table($this->business)->where("id",$row->id)->update(["wx"=>$wx]);
             if(empty($bool))
-                $this->failed("微信号更新失败");
+                $this->failed("微信号更新失败:".$row->id);
         }
 
         return $row;
