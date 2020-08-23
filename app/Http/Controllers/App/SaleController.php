@@ -23,8 +23,11 @@ class SaleController  extends BaseController
         $departId       = (int)$request->post("depart_id");
         $smsSendNums    = (int)$request->post("sms_send_nums");
         $position       = $request->post("position");
+        $wx             = $request->post("wx");
+        if(empty($wx))
+            $this->failed("微信不能为空");
 
-        $data = $clueRepository->getRandomData($departId,$smsSendNums,$position);
+        $data = $clueRepository->getRandomData($departId,$smsSendNums,$wx,$position);
 
         $this->success($data);
     }

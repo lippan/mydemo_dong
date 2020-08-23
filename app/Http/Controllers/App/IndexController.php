@@ -143,7 +143,7 @@ class IndexController  extends BaseController
                 $row->title = $row->name;
             if(empty($row->order_num))
                 $row->order_num = "很低";
-            
+
             $this->success($row);
         }
         else

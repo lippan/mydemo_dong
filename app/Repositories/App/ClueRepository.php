@@ -59,7 +59,7 @@ class ClueRepository
     /**
      * 获取随机数据
      */
-    public function getRandomData($departId,$smsSendNums,$position)
+    public function getRandomData($departId,$smsSendNums,$wx,$position)
     {
         $where = [
             "depart_id"         => $departId,
@@ -71,6 +71,13 @@ class ClueRepository
                 $query->where('position',"like",$position."%");
             })
             ->first();
+
+        if(!empty($row))
+        {
+            $bool = DB::table($this->business)->where("id",$row->id)->update(["wx"=>$wx]);
+            if(empty($bool))
+                $this->failed("微信号更新失败");
+        }
 
         return $row;
     }
