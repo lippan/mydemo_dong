@@ -119,76 +119,27 @@ function expain_token($token)
 
 /**
  * 按用户uid获取权限
- * @param $crmUserId
+ * @param $uid
+ * @param $isDepartAdmin
+ * @param $level
+ * @return mixed
  */
-function getUserAuth($crmUserId,$uid)
+function getUserAuth($uid,$isDepartAdmin,$level)
 {
-    $crm_employee   = config("db_table.crm_employee");
-   // $crm_position   = config("db_table.crm_position");
-    $crm_org_admin  = config("db_table.crm_org_admin");
-    $crm_org        = config("db_table.crm_org");
-    $user_table     = config("db_table.user_table");
-
-    $row = DB::table($crm_org_admin)->where("crm_user_id",$crmUserId)->first();
-    if(empty($row))
+    //如果不是部门管理员
+    if(empty($isDepartAdmin))
         return [$uid];
 
+    $depart_table       = config("db_table.depart_table");
+    $user_table         = config("db_table.user_table");
 
-    //获取该员工的岗位信息
-//    $row = DB::table($crm_employee." as a")
-//        ->leftJoin($crm_position." as b","a.position_id","=","b.position_id")
-//        ->leftJoin($user_table." as d","d.crm_user_id","=","a.user_id")
-//        ->where("a.user_id",$crmUserId)
-//        ->where("a.org_id",$adminRow->org_id)
-//        ->first(["a.*","b.position_text","d.uid"]);
+    $uidArr = DB::table($depart_table." as a")
+        ->leftJoin($user_table." as b","a.depart_id","=","b.depart_id")
+        ->where("a.level","like","$level%")
+        ->pluck("b.uid")
+        ->toArray();
 
-    //判断确认该组织下是否还有下级组织，如果存在下级组织 那么  下级组织的员工也是可以被领导者看到的
-
-    //该员工是否是当前组织的管理者
-    if($row->is_org_admin)//获取该组织下所有的员工userid(除开并行管理者)
-    {
-        //获取当前组织作为上级组织的 列表
-        $orgList = DB::table($crm_org)->where("org_up",$row->org_id)->pluck("org_id")->toArray();
-        //查询是否有其他管理者
-        $list = DB::table($crm_org_admin)->where("org_id",$row->org_id)->whereNotIn("crm_user_id",[$crmUserId])->pluck("uid")->toArray();
-
-        if(!empty($orgList))//如果存在下级组织
-        {
-            $thirdOrgId = DB::table($crm_org)->whereIn("org_up",$orgList)->pluck("org_id")->toArray();
-            if(!empty($thirdOrgId))
-            {
-                 $orgList = array_merge($orgList,$thirdOrgId);
-            }
-
-            $otherUidArr = DB::table($crm_employee." as a")
-                ->leftJoin($user_table." as b","b.crm_user_id","=","a.user_id")
-                ->whereIn("a.org_id",$orgList)
-                ->whereNotNull("b.uid")
-                ->pluck("b.uid")
-                ->toArray();
-        }
-
-        $userArr = DB::table($crm_employee." as a")
-            ->leftJoin($user_table." as b","b.crm_user_id","=","a.user_id")
-            ->where("a.org_id",$row->org_id)
-            ->whereNotNull("b.uid")
-            ->pluck("b.uid")
-            ->toArray();
-
-        if(!empty($otherUidArr))
-            $userArr        = array_merge($userArr,$otherUidArr);
-
-        if(!empty($list))
-        {
-            $remainArr      = array_diff($userArr,$list);
-            return $remainArr;
-        }
-
-        return $userArr;
-    }
-
-    return [$row->uid];
-
+    return empty($uidArr) ? [] :$uidArr;
 }
 
 /**

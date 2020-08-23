@@ -48,8 +48,8 @@ class CheckWebToken{
         if(time()>$params['expire'])
             $this->failed("token已过期！",4001);
 
-        if($params["is_admin"]!=1)
-            $this->failed("您没有权限");
+        //if($params["is_admin"]!=1)
+            //$this->failed("您没有权限");
 
         $user = [
             'uid'       => $params["uid"],
