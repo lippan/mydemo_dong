@@ -12,6 +12,9 @@ class ClueRepository
 {
     use \App\Helpers\ApiResponse;
 
+    private $depart         = "depart";
+    private $business       = "business";
+
     /**
      * 添加线索
      * @param $params
@@ -49,6 +52,44 @@ class ClueRepository
         isset($params["remark"]) && $data["remark"] = $params["remark"];
 
         $bool = DB::table("live_data")->insert($data);
+
+        return $bool;
+    }
+
+    /**
+     * 获取随机数据
+     */
+    public function getRandomData($departId,$smsSendNums,$position)
+    {
+        $where = [
+            "depart_id"         => $departId,
+            "sms_send_nums"     => $smsSendNums
+        ];
+        $row = DB::table($this->business)
+            ->where($where)
+            ->when(!empty($position),function($query)use($position){
+                $query->where('position',"like",$position."%");
+            })
+            ->first();
+
+        return $row;
+    }
+
+    /**
+     * 更新线索
+     */
+    public function updateClue($id)
+    {
+        $row = DB::table($this->business)->where("id",$id)->first();
+        if(empty($row))
+            $this->failed("非法请求");
+
+        $data = [
+            "sms_send_nums"         => $row->sms_send_nums + 1,
+            "sms_last_send_time"    => date("Y-m-d H:i:s")
+        ];
+
+        $bool = DB::table($this->business)->where("id",$id)->update($data);
 
         return $bool;
     }

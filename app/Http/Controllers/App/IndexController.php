@@ -6,6 +6,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\BaseController;
+use App\Repositories\Business\ClueRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
