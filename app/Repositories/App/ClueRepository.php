@@ -3,7 +3,7 @@
 /**
  * 线索资源
  */
-namespace App\Repositories\Business;
+namespace App\Repositories\App;
 
 
 use Illuminate\Support\Facades\DB;

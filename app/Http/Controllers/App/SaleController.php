@@ -6,7 +6,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\BaseController;
-use App\Repositories\Business\ClueRepository;
+use App\Repositories\App\ClueRepository;
 use Illuminate\Http\Request;
 
 class SaleController  extends BaseController
