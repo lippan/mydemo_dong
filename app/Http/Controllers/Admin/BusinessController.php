@@ -34,7 +34,7 @@ class BusinessController extends  BaseController
         $data["status"]         = $request->post("status");
         $data["page"]           = $request->post("page");
         $data["page_nums"]      = $request->post("page_nums");
-        $data["field"]          = $request->post("field","id");
+        $data["field"]          = $request->post("field","answer_update_time");
         $data["sort"]           = $request->post("sort","desc");
 
         if(!in_array($data["sort"],["desc","asc"]))
