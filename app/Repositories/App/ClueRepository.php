@@ -85,6 +85,7 @@ class ClueRepository
             $this->failed("非法请求");
 
         $data = [
+            "end_time"              => date("Y-m-d H:i:s",strtotime("+7 day")),
             "sms_send_nums"         => $row->sms_send_nums + 1,
             "sms_last_send_time"    => date("Y-m-d H:i:s")
         ];
