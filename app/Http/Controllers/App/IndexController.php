@@ -139,6 +139,11 @@ class IndexController  extends BaseController
             if(time()> strtotime($row->end_time))
                 $this->failed("您访问的页面过期了");
 
+            if(empty($row->title))
+                $row->title = $row->name;
+            if(empty($row->order_num))
+                $row->order_num = "很低";
+            
             $this->success($row);
         }
         else
