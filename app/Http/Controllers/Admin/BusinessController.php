@@ -52,28 +52,29 @@ class BusinessController extends  BaseController
     public function save(Request $request,BusinessRepository $businessRepository)
     {
         $adminUser["uid"]           = $request->get("uid");
+        $adminUser["depart_id"]     = $request->get("depart_id");
         $adminUser["username"]      = $request->get("username");
 
         if(empty($adminUser["uid"]))
             $this->failed("您还未登陆");
 
         $data             = $request->post();
-        $customer_id      = (int)$request->post("customer_id");
+        $customer_id      = (int)$request->post("id");
 
         if(!empty($customer_id))
         {
             $businessRepository->edit($data,$customer_id,$adminUser["uid"]);
 
-            admin_operate_log($adminUser,request()->route()->getActionName(),[],"modify",$adminUser["username"]."修改了商机信息:customer_id".$customer_id);
+            //admin_operate_log($adminUser,request()->route()->getActionName(),[],"modify",$adminUser["username"]."修改了商机信息:customer_id".$customer_id);
             $this->success("修改成功");
         }
 
 
-        $customer_id = $businessRepository->add($data,$adminUser["uid"]);
+        $customer_id = $businessRepository->add($data,$adminUser["uid"],$adminUser["depart_id"]);
         if($customer_id>0)
         {
-            admin_operate_log($adminUser,request()->route()->getActionName(),[],"add",$adminUser["username"]."新增了商机信息:customer_id".$customer_id);
-            $this->success(["customer_id"  => $customer_id]);
+            //admin_operate_log($adminUser,request()->route()->getActionName(),[],"add",$adminUser["username"]."新增了商机信息:customer_id".$customer_id);
+            $this->success(["id"  => $customer_id]);
         }
 
         $this->failed("添加失败");

@@ -15,12 +15,14 @@ class BusinessRepository
     //客户表
     private $business;
     private $user;
+    private $depart;
 
     //初始化需要用到的表名称
     public function __construct()
     {
         $this->user                     = config('db_table.user_table');
         $this->business                 = config('db_table.business_table');
+        $this->depart                   = config('db_table.depart_table');
     }
 
 
@@ -60,32 +62,24 @@ class BusinessRepository
      * @param $params
      * @return int
      */
-    public function add($params,$uid)
+    public function add($params,$uid,$departId)
     {
         $data = [
             "uid"           => $uid,//归属员工id，谁添加的 归属谁
-            "source"        => $params["source"],//商机类型
-            //"level"         => $params["level"],//组织架构分级
+            "source"        => "地推",//商机类型
             "name"          => $params["name"],//客户名称
+            "mobile"        => $params["mobile"],//客户名称
+            "status"        => $params["status"],
+            "position"      => $params["position"],//地址名称
             "create_time"   => date("Y-m-d H:i:s")
         ];
 
-        isset($params["mobile"]) &&         $data["mobile"]         = $params["mobile"];//客户手机号
-        isset($params["industry"]) &&       $data["industry"]       = $params["industry"];//客户行业
-        isset($params["regist_area"]) &&    $data["regist_area"]    = $params["regist_area"];//注册区域
-        isset($params["qq_number"]) &&      $data["qq_number"]      = $params["qq_number"];//客户QQ
+        //此处需要记录城市
+        $drow = DB::table($this->depart)->where("depart_id",$departId)->first();
 
-        isset($params["wx_number"]) &&      $data["wx_number"]      = $params["wx_number"];//客户wx
-        isset($params["mail_number"]) &&    $data["mail_number"]    = $params["mail_number"];//客户邮箱
-        isset($params["tax"]) &&            $data["tax"]            = $params["tax"];//税种
+        $data["city"] = isset($drow->depart_name) ? $drow->depart_name:"";
 
-        isset($params["is_special_industry"]) && $data["is_special_industry"] = $params["is_special_industry"];//是否特种行业
-
-        isset($params["company_type"]) &&   $data["company_type"]   = $params["company_type"];//企业类型
-        isset($params["type"]) &&         $data["type"]         = $params["type"];//意向等级
-        isset($params["first_price"]) &&    $data["first_price"]    = $params["first_price"];//首次报价
-        isset($params["remark"]) &&         $data["remark"]         = $params["remark"];//客户备注
-        isset($params["first_contact"]) &&  $data["first_contact"]  = $params["first_contact"];//首次交谈记录
+        isset($params["remark"]) &&      $data["remark"]      = $params["remark"];//客户QQ
 
         if(isset($params["mobile"]) && !empty($params["mobile"]))
         {
@@ -106,39 +100,26 @@ class BusinessRepository
      * @param $customerId
      * @return bool
      */
-    public function edit($params,$customerId,$uid)
+    public function edit($params,$id,$uid)
     {
-        $row = DB::table($this->business)->where("customer_id",$customerId)->first();
+        $row = DB::table($this->business)->where("id",$id)->first();
         if(empty($row))
-            $this->failed("该手机号已存在");
+            $this->failed("访问出错");
 
         //验证该条记录是否为他本人的
-        if($row->uid != $uid)
-            $this->failed("您不能修改别人的商机");
+        //if($row->uid != $uid)
+            //$this->failed("您不能修改别人的内容");
 
         $data = [];
-        isset($params["mobile"]) &&         $data["mobile"]         = $params["mobile"];//客户手机号
-        isset($params["industry"]) &&       $data["industry"]       = $params["industry"];//客户行业
-        isset($params["regist_area"]) &&    $data["regist_area"]    = $params["regist_area"];//注册区域
-        isset($params["qq_number"]) &&      $data["qq_number"]      = $params["qq_number"];//客户QQ
-
-        isset($params["wx_number"]) &&      $data["wx_number"]      = $params["wx_number"];//客户wx
-        isset($params["mail_number"]) &&    $data["mail_number"]    = $params["mail_number"];//客户邮箱
-        isset($params["tax"]) &&            $data["tax"]            = $params["tax"];//税种
-
-        isset($params["is_special_industry"]) && $data["is_special_industry"] = $params["is_special_industry"];//是否特种行业
-
-        isset($params["company_type"]) &&   $data["company_type"]   = $params["company_type"];//企业类型
-        isset($params["source"]) &&         $data["source"]         = $params["source"];//客户来源
-        isset($params["first_price"]) &&    $data["first_price"]    = $params["first_price"];//首次报价
-        isset($params["remark"]) &&         $data["remark"]         = $params["remark"];//客户备注
-        isset($params["first_contact"]) &&  $data["first_contact"]  = $params["first_contact"];//首次交谈记录
+        isset($params["status"]) &&         $data["status"]         = $params["status"];//状态
+        isset($params["telphone_sale_nums"]) &&       $data["telphone_sale_nums"]       = $params["telphone_sale_nums"];//客户行业
+        isset($params["telphone_record"]) &&       $data["telphone_record"]       = $params["telphone_record"];//客户行业
 
 
         if(empty($data))
             return true;
 
-        $bool = DB::table($this->business)->where("customer_id",$customerId)->update($data);
+        $bool = DB::table($this->business)->where("id",$id)->update($data);
 
         return $bool;
     }
