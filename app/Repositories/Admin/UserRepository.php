@@ -167,6 +167,8 @@ class UserRepository
             ->get(["a.uid","a.username","a.mobile","a.role_id","a.depart_id","last_login_time","last_login_ip","is_depart_admin","a.status","a.create_time","b.depart_name"]);
 
         $data["list"]  = $list;
+
+        return $data;
     }
 
     protected function normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums)
