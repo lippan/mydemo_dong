@@ -19,6 +19,11 @@ class UserController extends  BaseController
     public function lists(Request $request,UserRepository $userRepository)
     {
 
+        $uid            = (int)$request->get("uid");
+        $is_admin       = (int)$request->get("is_admin");
+        $is_depart_admin= (int)$request->get("is_depart_admin");
+        $level          = $request->get("level");
+
         $data                   = $request->post();
         $data["keywords"]       = $request->post("keywords");
         $data["page"]           = $request->post("page");
@@ -26,7 +31,7 @@ class UserController extends  BaseController
         $data["field"]          = $request->post("field","create_time");
         $data["sort"]           = $request->post("sort","asc");
 
-        $list = $userRepository->lists($data);
+        $list = $userRepository->lists($data,$uid,$is_admin,$is_depart_admin,$level);
         $this->success($list);
     }
 
@@ -60,10 +65,11 @@ class UserController extends  BaseController
     {
         $adminUser["uid"]           = $request->get("uid");
         $adminUser["username"]      = $request->get("username");
+        $isDepartAdmin  = (int)$request->get("is_depart_admin");
 
         $is_admin      = (int)$request->get("is_admin");
 
-        if(empty($is_admin))
+        if(empty($is_admin)  && empty($isDepartAdmin))
             $this->failed("您没有此权限");
 
         $data = $request->post();
@@ -72,14 +78,14 @@ class UserController extends  BaseController
         {
             $userRepository->edit($data,$uid,$adminUser["uid"]);
 
-            admin_operate_log($adminUser,request()->route()->getActionName(),[],"modify",$adminUser["username"]."修改了用户信息:uid".$uid);
+            //admin_operate_log($adminUser,request()->route()->getActionName(),[],"modify",$adminUser["username"]."修改了用户信息:uid".$uid);
             $this->success("修改成功");
         }
 
         $uid = $userRepository->add($data,$adminUser["uid"]);
         if($uid>0)
         {
-            admin_operate_log($adminUser,request()->route()->getActionName(),[],"add",$adminUser["username"]."新增了用户信息:uid".$uid);
+            //admin_operate_log($adminUser,request()->route()->getActionName(),[],"add",$adminUser["username"]."新增了用户信息:uid".$uid);
             $this->success(["uid"=>$uid]);
         }
 

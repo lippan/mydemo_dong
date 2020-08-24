@@ -44,6 +44,7 @@ class LoginController extends BaseController
             'status'    => $user->status,
             'username'  => $user->username,
             'is_admin'  => $user->is_admin,
+            'is_depart_admin' =>$user->is_depart_admin,
             'role_id'   => $user->role_id,
             'expire'    => time()+3600*24
         ];

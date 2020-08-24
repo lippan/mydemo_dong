@@ -20,11 +20,16 @@ class DepartController extends  BaseController
      */
     public function lists(Request $request,DepartRepository $departRepository)
     {
+        $uid            = (int)$request->get("uid");
+        $is_admin       = (int)$request->get("is_admin");
+        $is_depart_admin= (int)$request->get("is_depart_admin");
+        $level          = $request->get("level");
+
         $data                   = $request->post();
         $data["page"]           = $request->post("page");
         $data["page_nums"]      = $request->post("page_nums");
 
-        $list = $departRepository->lists($data);
+        $list = $departRepository->lists($data,$uid,$is_admin,$is_depart_admin,$level);
 
         $this->success($list);
     }
@@ -39,8 +44,9 @@ class DepartController extends  BaseController
     {
         $uid           = $request->get("uid");
         $is_admin      = (int)$request->get("is_admin");
+        $is_depart_admin      = (int)$request->get("is_depart_admin");
 
-        if(empty($is_admin))
+        if(empty($is_admin) && empty($is_depart_admin))
             $this->failed("您没有此权限");
 
         $data   = $request->post();

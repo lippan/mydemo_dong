@@ -30,53 +30,23 @@ class UserRepository
     /**
      * 获取列表
      */
-    public function lists($params)
+    public function lists($params,$uid,$isAdmin,$isDepartAdmin,$level)
     {
         $where      = [];
         $page       = !empty($params['page'])       ? (int)$params['page']:1;
         $page_nums  = !empty($params['page_nums'])  ? (int)$params['page_nums']:10;
         $offset     = ($page-1) * $page_nums;
 
-        $field  = !empty($params["field"]) ? $params["field"]:"create_time";
-        $sort   = !empty($params["sort"]) ? $params["sort"]:"desc";
-
-
-        if(isset($params["status"]) && !empty($params["status"]))
-            $where[] = ["a.status","=",1];
-
-        if(isset($params["keywords"]) && !empty($params["keywords"]))
-            $where[] = ["a.username","like","%{$params["keywords"]}%"];
-
-        $count  = DB::table($this->user_table." as a")->where($where)->count();
-        if($count == 0)
-            return ["list"=>[],"count"=>0];
-
-        $data["count"] = $count;
-
-        $list = DB::table($this->user_table." as a")
-            ->leftJoin($this->depart_table." as b","a.depart_id","=","b.depart_id")
-            ->where($where)
-            ->orderby("a.".$field,$sort)
-            ->offset($offset)
-            ->limit($page_nums)
-            ->get(["a.uid","a.username","a.mobile","a.role_id","a.depart_id","last_login_time","last_login_ip","is_depart_admin","a.status","a.create_time","b.depart_name"]);
-
-        $data["list"]  = $list;
-        //$data["month"] = date("Y-m");
-
-        /*if(!$list->isEmpty())
+        if($isAdmin == 1)
         {
-            foreach($list as &$val)
-            {
-                $row = DB::table($this->user_month_target)->where("uid",$val->uid)->where("month",$data["month"])->first();
-                if(empty($row))
-                    $val->task_money = 0;
-                else
-                    $val->task_money = $row->task_money;
-            }
-        }*/
+            $list = $this->adminList($params,$offset,$page_nums);
 
-        return $data;
+            return $list;
+        }
+
+        $list = $this->normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums);
+
+        return $list;
     }
 
 
@@ -170,52 +140,67 @@ class UserRepository
     }
 
 
-    /**
-     * 设置月度销售额目标
-     */
-    public function setMonthTarget($toUid,$taskMoney)
+    public function adminList($params,$offset,$page_nums)
     {
-        $month = date("Y-m");
-        $where = [
-            "uid"       => $toUid,
-            "month"     => $month
-        ];
-        $row   = DB::table($this->user_month_target)->where($where)->first();
+        $where =[];
+        $field  = !empty($params["field"]) ? $params["field"]:"create_time";
+        $sort   = !empty($params["sort"]) ? $params["sort"]:"desc";
 
-        if(!empty($row))
-        {
-            $bool = DB::table($this->user_month_target)->where("id",$row->id)->update(["task_money"=>$taskMoney]);
+        if(isset($params["status"]) && !empty($params["status"]))
+            $where[] = ["a.status","=",1];
 
-            return $bool;
-        }
+        if(isset($params["keywords"]) && !empty($params["keywords"]))
+            $where[] = ["a.username","like","%{$params["keywords"]}%"];
 
-        $where["task_money"]    = $taskMoney;
-        $where["create_time"]   = date("Y-m-d H:i:s");
+        $count  = DB::table($this->user_table." as a")->where($where)->count();
+        if($count == 0)
+            return ["list"=>[],"count"=>0];
 
-        $bool = DB::table($this->user_month_target)->insert($where);
+        $data["count"] = $count;
 
-        return $bool;
+        $list = DB::table($this->user_table." as a")
+            ->leftJoin($this->depart_table." as b","a.depart_id","=","b.depart_id")
+            ->where($where)
+            ->orderby("a.".$field,$sort)
+            ->offset($offset)
+            ->limit($page_nums)
+            ->get(["a.uid","a.username","a.mobile","a.role_id","a.depart_id","last_login_time","last_login_ip","is_depart_admin","a.status","a.create_time","b.depart_name"]);
+
+        $data["list"]  = $list;
     }
 
-
-    /**
-     * 绑定openid
-     * @param $openid
-     * @param $mobile
-     * @return bool
-     */
-    public function bindOpenId($openid,$mobile)
+    protected function normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums)
     {
-        $row    = DB::table($this->user_table)->where("mobile",$mobile)->first();
-        if(empty($row))
-            $this->failed("非法操作");
-        if($row->openid)
-            return true;
+        $where = [];
+        $field  = !empty($params["field"]) ? $params["field"]:"create_time";
+        $sort   = !empty($params["sort"]) ? $params["sort"]:"desc";
 
-        $bool   = DB::table($this->user_table)->where("uid",$row->uid)->update(["openid"=>$openid]);
+        $uidArr = getUserAuth($uid,$isDepartAdmin,$level);
 
-        return $bool;
+        if(isset($params["status"]) && !empty($params["status"]))
+            $where[] = ["a.status","=",1];
+
+        if(isset($params["keywords"]) && !empty($params["keywords"]))
+            $where[] = ["a.username","like","%{$params["keywords"]}%"];
+
+        //var_dump($uidArr);exit;
+        $count  = DB::table($this->user_table." as a")->where($where)->whereIn("a.uid",$uidArr)->count();
+        if($count == 0)
+            return ["list"=>[],"count"=>0];
+
+        $data["count"] = $count;
+
+        $list = DB::table($this->user_table." as a")
+            ->leftJoin($this->depart_table." as b","a.depart_id","=","b.depart_id")
+            ->where($where)
+            ->whereIn("a.uid",$uidArr)
+            ->orderby("a.".$field,$sort)
+            ->offset($offset)
+            ->limit($page_nums)
+            ->get(["a.uid","a.username","a.mobile","a.role_id","a.depart_id","last_login_time","last_login_ip","is_depart_admin","a.status","a.create_time","b.depart_name"]);
+
+        $data["list"]  = $list;
+
+        return $data;
     }
-
-
 }

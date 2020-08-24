@@ -28,12 +28,35 @@ class DepartRepository
      * @param $params
      * @return mixed
      */
-    public function lists($params)
+    public function lists($params,$uid,$isAdmin,$isDepartAdmin,$level)
     {
-        $where      = [];
+
         $page       = !empty($params['page'])       ? (int)$params['page']:1;
         $page_nums  = !empty($params['page_nums'])  ? (int)$params['page_nums']:20;
         $offset     = ($page-1) * $page_nums;
+
+
+        if($isAdmin == 1)
+        {
+            $list = $this->adminList($params,$offset,$page_nums);
+            return $list;
+        }
+
+        $list = $this->normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums);
+
+        return $list;
+    }
+
+
+    /**
+     * 超级管理员列表
+     * @param $params
+     * @param $offset
+     * @param $page_nums
+     */
+    public function adminList($params,$offset,$page_nums)
+    {
+        $where      = [];
 
         $count  = DB::table($this->depart_table)->where($where)->count();
         if(empty($count))
@@ -51,6 +74,38 @@ class DepartRepository
 
         return $data;
     }
+
+
+
+    /**
+     * 超级管理员列表
+     * @param $params
+     * @param $offset
+     * @param $page_nums
+     */
+    public function normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums)
+    {
+
+        $where[] = ["level","like","$level%"];
+
+        $count  = DB::table($this->depart_table)->where($where)->count();
+        if(empty($count))
+            return ["count"=>0,"list"=>[]];
+
+        $data["count"] = $count;
+        $list   = DB::table($this->depart_table)
+            ->where($where)
+            ->orderby('depart_id',"desc")
+            ->offset($offset)
+            ->limit($page_nums)
+            ->get();
+
+        $data["list"] = $list;
+
+       return $data;
+    }
+
+
 
 
     /**
