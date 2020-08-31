@@ -101,8 +101,8 @@ class UserRepository
             "mobile"    => $params["mobile"],
             "username"  => $params["username"],
             "status"    => $params["status"],
-            "operator_uid"      => $admin_uid,
-            "operator_time"     => $time,
+            //"operator_uid"      => $admin_uid,
+            //"operator_time"     => $time,
         ];
 
         isset($params["depart_id"]) && $data["depart_id"] = $params["depart_id"];
