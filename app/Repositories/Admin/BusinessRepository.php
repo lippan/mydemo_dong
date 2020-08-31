@@ -14,6 +14,7 @@ class BusinessRepository
 
     //客户表
     private $business;
+    private $business_log;
     private $user;
     private $depart;
 
@@ -22,6 +23,7 @@ class BusinessRepository
     {
         $this->user                     = config('db_table.user_table');
         $this->business                 = config('db_table.business_table');
+        $this->business_log             = config('db_table.business_log');
         $this->depart                   = config('db_table.depart_table');
     }
 
@@ -45,15 +47,6 @@ class BusinessRepository
         $list = $this->normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums);
 
         return $list;
-    }
-
-
-    /**
-     * 商机详情
-     */
-    public function info($customerId)
-    {
-
     }
 
 
@@ -132,64 +125,43 @@ class BusinessRepository
      * @param $toUid
      * @return bool;
      */
-    public function allot($isAdmin,$isDepartAdmin,$uid,$level,$customerId,$toUid)
+    public function allot($isAdmin,$isDepartAdmin,$uid,$level,$toUid,$num)
     {
-
-        $info = DB::table($this->business." as a")
-            ->leftJoin($this->user." as b","a.uid","=","b.uid")
-            ->where("customer_id",$customerId)
-            ->first(["a.*","b.username"]);
-
-        if(empty($info))
-            $this->failed("访问出错");
-
-        //如果人员没有做修改，则直接返回
-        if($toUid == $info->uid)
-            return true;
-
-        //查询该线索是否成交或者完成   dealed  finished
-        if($info->status == "dealed" || $info->status == "finished")
-            $this->failed("该商机已成交或已完成");
-
         //首先查询该条线索是不是 这个管理员的
-        if(empty($isAdmin))
+        if($uid == $toUid)
+            $this->failed("不能分配给自己");
+
+        //$uidArr = getUserAuth($uid,$isDepartAdmin,$level);
+        if($isAdmin)
         {
-            $uidArr = getUserAuth($uid,$isDepartAdmin,$level);
-
-            $row = DB::table($this->business)->whereIn("uid",$uidArr)->where("customer_id",$customerId)->first();
-            if(empty($row))
-                $this->failed("您没有权限");
-
-            //查询要分配的这个人是否为他的部下
-            if(!in_array($toUid,$uidArr))
-                $this->failed("对方不在您的部门");
+            $clist   = DB::table($this->business)->where("sms_send_nums",0)->take($num)->pluck("id");
         }
+        else
+            $clist   = DB::table($this->business)->whereIn("uid",$uid)->where("sms_send_nums",0)->take($num)->pluck("id");
 
-        //查询该用户是否封禁
-        $urow = DB::table($this->user)->where("uid",$toUid)->first();
-        if(empty($urow))
-            $this->failed("非法操作");
 
-        if(empty($urow->status))
-            $this->failed("不能分配封禁员工");
-
+        $realNum    = count($clist);
         $updateTime = date("Y-m-d H:i:s");
 
+        if(empty($realNum))
+            $this->failed("满足条件的商机数量为0");
+
+        if($realNum < $num)
+            $this->failed("满足条件的商机数量为".$realNum."个");
+
         $data = [
-            "customer_id"   => $customerId,
-            "old_uid"       => $info->uid,
+            "old_uid"       => $uid,
             "new_uid"       => $toUid,
-            "operate_type"  => "allot",
-            "remark"        => "商机信息从---".$info->username."---转给了---".$urow->username,
-            "operate_uid"   => $uid,
-            "operate_remark"=> "",
+            "num"           => $realNum,
+            "remark"        => "分配了".$realNum."条商机",
             "create_time"   => $updateTime
         ];
+
         //此处需要事务操作
         try{
-            DB::transaction(function () use($customerId,$toUid,$data,$updateTime){
-                DB::table($this->business)->where("customer_id",$customerId)->update(["uid"=>$toUid,"allot_time"=>$updateTime]);
-                DB::table($this->business_log)->insert($data);
+            DB::transaction(function () use($clist,$toUid,$data,$updateTime){
+                DB::table($this->business)->whereIn("id",$clist)->update(["uid"=>$toUid]);
+                //DB::table($this->business_log)->insert($data);
             });
         }catch(QueryException $ex){
             $this->failed("分配失败:数据库更新失败");

@@ -93,6 +93,8 @@ class BusinessController extends  BaseController
         $customer_id    = (int)$request->post("customer_id");
         $level          = $request->get("level");
 
+        $num            = $request->post("num");
+
         if(empty($uid))
             $this->failed("您还没有登录");
 
@@ -103,7 +105,7 @@ class BusinessController extends  BaseController
         if(empty($toUid))
             $this->failed("分配的人id不能为空");
 
-        $bool = $businessRepository->allot($isAdmin,$isDepartAdmin,$uid,$level,$customer_id,$toUid);
+        $bool = $businessRepository->allot($isAdmin,$isDepartAdmin,$uid,$level,$toUid,$num);
 
         $bool ? $this->success("分配成功"):$this->failed("分配失败");
     }

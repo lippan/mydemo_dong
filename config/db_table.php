@@ -10,4 +10,5 @@ return [
     "role_table"            => "role",//角色表
     "perm_table"            => "perm",//权限表
     "business_table"        => "business",//商机列表
+    "business_log"          => "business_log",//商机日志列表
 ];
