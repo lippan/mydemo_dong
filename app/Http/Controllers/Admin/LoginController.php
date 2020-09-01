@@ -53,7 +53,7 @@ class LoginController extends BaseController
         //记录操作
         admin_operate_log((array)$user,request()->route()->getActionName(),[],"login",$user->username."登陆了后台系统");
 
-        $this->success(["token"=>$token,"is_admin"=>$user->is_admin,"is_depart_admin"=>$user->is_depart_admin]);
+        $this->success(["token"=>$token,"username"=>$user->username,"is_admin"=>$user->is_admin,"is_depart_admin"=>$user->is_depart_admin]);
     }
 
 

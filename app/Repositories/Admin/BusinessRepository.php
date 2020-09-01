@@ -137,7 +137,7 @@ class BusinessRepository
             $clist   = DB::table($this->business)->where("sms_send_nums",0)->take($num)->pluck("id");
         }
         else
-            $clist   = DB::table($this->business)->whereIn("uid",$uid)->where("sms_send_nums",0)->take($num)->pluck("id");
+            $clist   = DB::table($this->business)->where("uid",$uid)->where("sms_send_nums",0)->take($num)->pluck("id");
 
 
         $realNum    = count($clist);
