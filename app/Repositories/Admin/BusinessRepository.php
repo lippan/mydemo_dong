@@ -459,6 +459,8 @@ class BusinessRepository
                 ->get(["a.*","b.username"]);
 
             $data["list"] = $list;
+
+            return $data;
         }
 
 
