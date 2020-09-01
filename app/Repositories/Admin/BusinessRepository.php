@@ -424,10 +424,43 @@ class BusinessRepository
         {
             $where[] = ["a.create_time","<",$params["end_time"]." 23:59:59"];
         }
-        if(isset($params["type"]) && !empty($params["type"]))
+
+        if(isset($params["keywords"]) && !empty($params["keywords"]))
         {
-            $where[] = ["a.type","=",$params["type"]];
+            //获取数量
+            $count = DB::table($this->business." as a")
+                ->leftJoin($this->user." as b","b.uid","=","a.uid")
+                ->where($where)
+                ->where(function($query)use($params){
+                    $query->where('a.name',"like","%".$params["keywords"]."%")
+                        //->orWhere("a.username","like","%".$params["keywords"]."%")
+                        ->orWhere("a.mobile","like","%".$params["keywords"]."%");
+                })
+                ->whereIn("a.uid",$uidArr)
+                ->count();
+
+            if(empty($count))
+                return ["list"=>[],"count"=>0];
+
+            $data["count"] = $count;
+
+            $list = DB::table($this->business." as a")
+                ->leftJoin($this->user." as b","b.uid","=","a.uid")
+                ->where($where)
+                ->where(function($query)use($params){
+                    $query->where('a.name',"like","%".$params["keywords"]."%")
+                        //->orWhere("a.username","like","%".$params["keywords"]."%")
+                        ->orWhere("a.mobile","like","%".$params["keywords"]."%");
+                })
+                ->whereIn("a.uid",$uidArr)
+                ->orderby('a.answer_update_time',"desc")
+                ->offset($offset)
+                ->limit($page_nums)
+                ->get(["a.*","b.username"]);
+
+            $data["list"] = $list;
         }
+
 
         //获取数量
         $count = DB::table($this->business." as a")
@@ -445,7 +478,7 @@ class BusinessRepository
             ->leftJoin($this->user." as b","b.uid","=","a.uid")
             ->where($where)
             ->whereIn("a.uid",$uidArr)
-            ->orderby('a.create_time',"desc")
+            ->orderby('a.answer_update_time',"desc")
             ->offset($offset)
             ->limit($page_nums)
             ->get(["a.*","b.username"]);
