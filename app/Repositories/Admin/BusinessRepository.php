@@ -356,7 +356,7 @@ class BusinessRepository
                 ->leftJoin($this->user." as b","a.uid","=","b.uid")
                 ->where($where)
                 ->where(function($query)use($params){
-                    $query->where('b.username',"like","%".$params["keywords"]."%")
+                    $query->where('a.name',"like","%".$params["keywords"]."%")
                         //->orWhere("a.username","like","%".$params["keywords"]."%")
                         ->orWhere("a.mobile","like","%".$params["keywords"]."%");
                 })
@@ -370,7 +370,7 @@ class BusinessRepository
                 ->leftJoin($this->user." as b","a.uid","=","b.uid")
                 ->where($where)
                 ->where(function($query)use($params){
-                    $query->where('b.username',"like","%".$params["keywords"]."%")
+                    $query->where('a.name',"like","%".$params["keywords"]."%")
                         //->orWhere("a.username","like","%".$params["keywords"]."%")
                         ->orWhere("a.mobile","like","%".$params["keywords"]."%");
                 })
@@ -408,7 +408,7 @@ class BusinessRepository
     //普通员工--商机列表
     protected function normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums)
     {
-        $where[]  = ["a.uid",">",0];
+        $where  = [];
         if(isset($params["customer_id"]))
         {
             $where[] = ["a.customer_id","=",$params["customer_id"]];
