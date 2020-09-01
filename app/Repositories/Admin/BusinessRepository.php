@@ -341,11 +341,11 @@ class BusinessRepository
 
         if(isset($params["start_time"]) && !empty($params["start_time"]))
         {
-            $where[] = ["a.create_time",">",$params["start_time"]];
+            $where[] = ["a.answer_update_time",">",$params["start_time"]];
         }
         if(isset($params["end_time"]) && !empty($params["end_time"]))
         {
-            $where[] = ["a.create_time","<",$params["end_time"]." 23:59:59"];
+            $where[] = ["a.answer_update_time","<",$params["end_time"]." 23:59:59"];
         }
 
         if(isset($params["keywords"]) && !empty($params["keywords"]))
@@ -418,11 +418,11 @@ class BusinessRepository
 
         if(isset($params["start_time"]) && !empty($params["start_time"]))
         {
-            $where[] = ["a.create_time",">",$params["start_time"]];
+            $where[] = ["a.answer_update_time",">",$params["start_time"]];
         }
         if(isset($params["end_time"]) && !empty($params["end_time"]))
         {
-            $where[] = ["a.create_time","<",$params["end_time"]." 23:59:59"];
+            $where[] = ["a.answer_update_time","<",$params["end_time"]." 23:59:59"];
         }
 
         if(isset($params["keywords"]) && !empty($params["keywords"]))
