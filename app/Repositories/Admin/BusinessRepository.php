@@ -31,7 +31,7 @@ class BusinessRepository
     /**
      * 列表
      */
-    public function lists($params,$uid,$isAdmin,$isDepartAdmin,$level)
+    public function lists($params,$uid,$isAdmin,$isDepartAdmin,$level,$role_id = null)
     {
         $page       = !empty($params['page'])       ? (int)$params['page']:1;
         $page_nums  = !empty($params['page_nums'])  ? (int)$params['page_nums']:10;
@@ -42,6 +42,10 @@ class BusinessRepository
             $list = $this->adminList($params,$offset,$page_nums);
 
             return $list;
+        }
+        if($role_id == 3)//电销 按操作时间排序
+        {
+
         }
 
         $list = $this->normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums);
@@ -108,6 +112,11 @@ class BusinessRepository
         isset($params["telphone_sale_nums"]) &&       $data["telphone_sale_nums"]       = $params["telphone_sale_nums"];//客户行业
         isset($params["telphone_record"]) &&       $data["telphone_record"]       = $params["telphone_record"];//客户行业
 
+        if(!isset($params["telphone_sale_nums"]) || empty($params["telphone_sale_nums"]))
+        {
+            $data["telphone_sale_nums"] = !empty($row->telphone_sale_nums) ? $row->telphone_sale_nums + 1:1;
+        }
+        $data["telphone_last_call_time"] = date("Y-m-d H:i:s");
 
         if(empty($data))
             return true;
@@ -406,8 +415,11 @@ class BusinessRepository
 
 
     //普通员工--商机列表
-    protected function normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums)
+    protected function normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums,$role_id)
     {
+        $fields = $role_id == 3 ? "telphone_last_call_time":"answer_update_time";
+        $sort   = $role_id == 3 ? "asc":"desc";
+
         $where  = [];
         if(isset($params["customer_id"]))
         {
@@ -453,7 +465,7 @@ class BusinessRepository
                         ->orWhere("a.mobile","like","%".$params["keywords"]."%");
                 })
                 ->whereIn("a.uid",$uidArr)
-                ->orderby('a.answer_update_time',"desc")
+                ->orderby('a.'.$fields,$sort)
                 ->offset($offset)
                 ->limit($page_nums)
                 ->get(["a.*","b.username"]);
@@ -480,7 +492,7 @@ class BusinessRepository
             ->leftJoin($this->user." as b","b.uid","=","a.uid")
             ->where($where)
             ->whereIn("a.uid",$uidArr)
-            ->orderby('a.answer_update_time',"desc")
+            ->orderby('a.'.$fields,$sort)
             ->offset($offset)
             ->limit($page_nums)
             ->get(["a.*","b.username"]);

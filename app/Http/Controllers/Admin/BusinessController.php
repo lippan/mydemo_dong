@@ -24,6 +24,7 @@ class BusinessController extends  BaseController
         $uid            = (int)$request->get("uid");
         $is_admin       = (int)$request->get("is_admin");
         $is_depart_admin= (int)$request->get("is_depart_admin");
+        $role_id        = (int)$request->get("role_id");
         $level          = $request->get("level");
 
         if(empty($uid))
@@ -40,7 +41,7 @@ class BusinessController extends  BaseController
         if(!in_array($data["sort"],["desc","asc"]))
             $this->failed("排序参数错误");
 
-        $list = $businessRepository->lists($data,$uid,$is_admin,$is_depart_admin,$level);
+        $list = $businessRepository->lists($data,$uid,$is_admin,$is_depart_admin,$level,$role_id);
 
         $this->success($list);
     }
