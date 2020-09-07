@@ -43,12 +43,8 @@ class BusinessRepository
 
             return $list;
         }
-        if($role_id == 3)//电销 按操作时间排序
-        {
 
-        }
-
-        $list = $this->normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums);
+        $list = $this->normalList($params,$uid,$isDepartAdmin,$level,$offset,$page_nums,$role_id);
 
         return $list;
     }
